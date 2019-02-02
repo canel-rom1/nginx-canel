@@ -1,0 +1,11 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./www:/usr/share/nginx/html:ro
+
+# vim: ft=yaml tw=80 et ts=2 sw=2 sts=2
