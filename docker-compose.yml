@@ -7,5 +7,15 @@ services:
       - "8080:80"
     volumes:
       - ./www:/usr/share/nginx/html:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:www.domain.tld"
+      - "traefik.port=80"
+      - "traefik.docker.network=traefik_wan"
+
+networks:
+  traefik_wan:
+    external: true
+
 
 # vim: ft=yaml tw=80 et ts=2 sw=2 sts=2
