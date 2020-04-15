@@ -1,0 +1,21 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx1
+    networks:
+      - wan
+    volumes:
+      - ./www:/usr/share/nginx/html:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:site1.domain.lan"
+      - "traefik.port=80"
+      - "traefik.docker.network=traefik_wan"
+
+networks:
+  wan:
+    external: true
+
+
+# vim: ft=yaml tw=80 et ts=2 sw=2 sts=2

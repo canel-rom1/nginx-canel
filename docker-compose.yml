@@ -1,20 +1,49 @@
-version: '3'
+version: '3.7'
 services:
   nginx:
     image: nginx:latest
-    container_name: nginx
-    ports:
-      - "8080:80"
+    #container_name: nginx1
+    networks:
+      - wan
     volumes:
       - ./www:/usr/share/nginx/html:ro
     labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:www.domain.tld"
-      - "traefik.port=80"
-      - "traefik.docker.network=traefik_wan"
+      - traefik.enable=true
+      - traefik.http.routers.site1http.rule=Host(`site1.domain.lan`)
+      - traefik.http.routers.site1http.entrypoints=http
+
+      - traefik.http.routers.site1http.middlewares=redirect@file
+
+      - traefik.http.routers.site1https.tls=true
+      - traefik.http.routers.site1https.entrypoints=https
+      - traefik.http.routers.site1https.rule=Host(`site1.domain.lan`)
+
+# Enregistrer une route en HTTP
+      #- traefik.enable=true
+      #- traefik.http.routers.site1.entryPoints=http
+      #- traefik.http.routers.site1.rule=Host(`site1.domain.lan`)
+
+# Enregistrer une route en HTTPS. Obliger de configurer HTTP avant.
+      #- traefik.enable=true
+      #- traefik.http.routers.site1-http.entrypoints=http
+      #- traefik.http.routers.site1-http.rule=Host(`site1.domain.lan`)
+      #- traefik.http.routers.site1-https.tls=true
+      #- traefik.http.routers.site1-https.entrypoints=https
+      #- traefik.http.routers.site1-https.rule=Host(`site1.domain.lan`)
+
+# Forcer à utiliser HTTPS
+      #- traefik.enable=true
+      #- traefik.http.routers.site1-http.entrypoints=http
+      #- traefik.http.routers.site1-http.rule=Host(`site1.domain.lan`)
+      #- traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+      #- traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      #- traefik.http.routers.site1-http.middlewares=https-redirect@docker
+      #- traefik.http.routers.site1-https.tls=true
+      #- traefik.http.routers.site1-https.entrypoints=https
+      #- traefik.http.routers.site1-https.rule=Host(`site1.domain.lan`)
 
 networks:
-  traefik_wan:
+  wan:
     external: true
 
 
