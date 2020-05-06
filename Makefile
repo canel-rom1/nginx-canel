@@ -1,9 +1,9 @@
 git_repo   = gitlab
 git_branch = canel
-#git_version = $(shell cat ./.tag.txt)
 
 all:
 
 git-push:
-	git tag -a $(git_version) -m "Version $(git_version)"
+	expr $(shell cat .tag.txt) + 1 > .tag.txt
+	git tag -a $(shell cat .tag.txt) -m "Version $(shell cat .tag.txt)"
 	git push -u $(git_repo) $(git_branch) --follow-tags
