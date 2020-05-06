@@ -16,6 +16,8 @@ build: src/Dockerfile
 
 git-push:
 	expr $(shell cat .tag.txt) + 1 > .tag.txt
-	echo $(cat .tag.txt) >> ./src/www/index.html
+	echo $(shell cat .tag.txt) >> ./src/www/index.html
+	git add .
+	git commit -m "commit $(shell cat .tag.txt)"
 	git tag -a $(shell cat .tag.txt) -m "Version $(shell cat .tag.txt)"
 	git push -u $(git_repo) $(git_branch) --follow-tags
